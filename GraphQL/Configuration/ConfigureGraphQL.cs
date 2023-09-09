@@ -1,4 +1,6 @@
-﻿using GraphQL.Presentation;
+﻿using GraphQL.DataLoader;
+using GraphQL.Presentation;
+using GraphQL.Types;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +10,10 @@ public static class ConfigureGraphQL
     {
         services.AddGraphQLServer()
             .AddQueryType<Query>()
-            .AddMutationType<Mutation>();
+            .AddMutationType<Mutation>()
+            .AddType<SpeakerType>()
+            .AddDataLoader<SpeakerByIdDataLoader>()
+            .AddDataLoader<SessionByIdDataLoader>();
 
         return services;
     }

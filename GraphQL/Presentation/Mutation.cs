@@ -1,13 +1,16 @@
 ﻿using GraphQL.Data;
+using GraphQL.Data.Entities;
+using GraphQL.Extensions;
 using GraphQL.Mutations.Speakers.AddSpeaker;
 
 namespace GraphQL.Presentation;
 
 public class Mutation
 {
+    [UseApplicationDbContext]
     public async Task<AddSpeakerPayload> AddSpeakerAsync(
         AddSpeakerInput input,
-        [Service] ApplicationDbContext context)
+        [ScopedService] ApplicationDbContext context)
     {
         var speaker = new Speaker
         {

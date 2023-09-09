@@ -1,4 +1,4 @@
-﻿using GraphQL.Data;
+﻿using GraphQL.Data.Entities;
 
 namespace GraphQL.Mutations.Speakers.AddSpeaker;
 
