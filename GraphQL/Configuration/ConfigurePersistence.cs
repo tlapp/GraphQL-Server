@@ -8,7 +8,7 @@ public static class ConfigurePersistence
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
         services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlite("Data Source=conferences.db"));
+            options.UseSqlite("Data Source=App_data\\conferences.db"));
         return services;
     }
 }
