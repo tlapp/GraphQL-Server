@@ -12,6 +12,8 @@ public static class ConfigureGraphQL
         services.AddGraphQLServer()
             .AddQueryType(d => d.Name("Query"))
                 .AddTypeExtension<SpeakerQueries>()
+                .AddTypeExtension<SessionQueries>()
+                .AddTypeExtension<TrackQueries>()
             .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<SpeakerMutations>()
                 .AddTypeExtension<SessionMutations>()
