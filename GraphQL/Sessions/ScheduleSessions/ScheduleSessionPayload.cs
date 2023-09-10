@@ -9,9 +9,15 @@ namespace GraphQL.Sessions.ScheduleSessions;
 
 public class ScheduleSessionPayload : SessionPayloadBase
 {
-    public ScheduleSessionPayload(Session session) : base(session) { }
+    public ScheduleSessionPayload(Session session)
+        : base(session)
+    {
+    }
 
-    public ScheduleSessionPayload(UserError error) : base(new[] { error }) { }
+    public ScheduleSessionPayload(UserError error)
+        : base(new[] { error })
+    {
+    }
 
     public async Task<Track?> GetTrackAsync(
         TrackByIdDataLoader trackById,
@@ -27,7 +33,7 @@ public class ScheduleSessionPayload : SessionPayloadBase
 
     [UseApplicationDbContext]
     public async Task<IEnumerable<Speaker>?> GetSpeakersAsync(
-        [ScopedService] ApplicationDbContext context,
+        [ScopedService] ApplicationDbContext dbContext,
         SpeakerByIdDataLoader speakerById,
         CancellationToken cancellationToken)
     {
@@ -36,8 +42,8 @@ public class ScheduleSessionPayload : SessionPayloadBase
             return null;
         }
 
-        int[] speakerIds = await context.Sessions
-            .Where(w => w.Id == Session.Id)
+        int[] speakerIds = await dbContext.Sessions
+            .Where(s => s.Id == Session.Id)
             .Include(s => s.SessionSpeakers)
             .SelectMany(s => s.SessionSpeakers.Select(t => t.SpeakerId))
             .ToArrayAsync();

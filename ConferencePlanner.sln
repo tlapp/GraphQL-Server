@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Tests", "GraphQL.Tests\GraphQL.Tests.csproj", "{70BCA69C-80B2-472F-A3C3-C488ABDDDAD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,15 @@ Global
 		{AC325CC3-93F1-42D3-A9D6-3E393A43ECA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC325CC3-93F1-42D3-A9D6-3E393A43ECA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC325CC3-93F1-42D3-A9D6-3E393A43ECA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70BCA69C-80B2-472F-A3C3-C488ABDDDAD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70BCA69C-80B2-472F-A3C3-C488ABDDDAD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70BCA69C-80B2-472F-A3C3-C488ABDDDAD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70BCA69C-80B2-472F-A3C3-C488ABDDDAD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06502DB6-C073-40EF-B08F-97F2EF23B7AF}
 	EndGlobalSection
 EndGlobal

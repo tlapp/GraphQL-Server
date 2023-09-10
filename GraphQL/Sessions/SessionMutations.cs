@@ -4,10 +4,11 @@ using GraphQL.Data.Entities;
 using GraphQL.Extensions;
 using GraphQL.Sessions.AddSessions;
 using GraphQL.Sessions.ScheduleSessions;
+using HotChocolate.Subscriptions;
 
 namespace GraphQL.Sessions;
 
-[ExtendObjectType("Mutation")]
+[ExtendObjectType(Name = "Mutation")]
 public class SessionMutations
 {
     [UseApplicationDbContext]
@@ -19,13 +20,13 @@ public class SessionMutations
         if (string.IsNullOrEmpty(input.Title))
         {
             return new AddSessionPayload(
-                new Common.UserError("The title cannot be empty.", "TITLE_EMPTY"));
+                new UserError("The title cannot be empty.", "TITLE_EMPTY"));
         }
 
         if (input.SpeakerIds.Count == 0)
         {
             return new AddSessionPayload(
-                new Common.UserError("No speaker assigned.", "NO_SPEAKER"));
+                new UserError("No speaker assigned.", "NO_SPEAKER"));
         }
 
         var session = new Session
@@ -43,7 +44,6 @@ public class SessionMutations
         }
 
         context.Sessions.Add(session);
-
         await context.SaveChangesAsync(cancellationToken);
 
         return new AddSessionPayload(session);
@@ -52,7 +52,8 @@ public class SessionMutations
     [UseApplicationDbContext]
     public async Task<ScheduleSessionPayload> ScheduleSessionAsync(
         ScheduleSessionInput input,
-        [ScopedService] ApplicationDbContext context)
+        [ScopedService] ApplicationDbContext context,
+        [Service] ITopicEventSender eventSender)
     {
         if (input.EndTime < input.StartTime)
         {
@@ -61,6 +62,7 @@ public class SessionMutations
         }
 
         Session session = await context.Sessions.FindAsync(input.SessionId);
+        int? initialTrackId = session.TrackId;
 
         if (session is null)
         {
@@ -73,6 +75,10 @@ public class SessionMutations
         session.EndTime = input.EndTime;
 
         await context.SaveChangesAsync();
+
+        await eventSender.SendAsync(
+            nameof(SessionSubscriptions.OnSessionScheduledAsync),
+            session.Id);
 
         return new ScheduleSessionPayload(session);
     }

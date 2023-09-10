@@ -10,6 +10,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseWebSockets();
 app.UseRouting();
 
 app.AddGraphQLEndpoints();

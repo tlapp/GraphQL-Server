@@ -16,7 +16,7 @@ public class Attendee : BaseEntity
     [StringLength(200)]
     public string? UserName { get; set; }
 
-    [StringLength(255)]
+    [StringLength(256)]
     public string? EmailAddress { get; set; }
 
     public ICollection<SessionAttendee> SessionsAttendees { get; set; } =

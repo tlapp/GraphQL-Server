@@ -13,8 +13,7 @@ public class AttendeeType : ObjectType<Attendee>
         descriptor
             .ImplementsNode()
             .IdField(t => t.Id)
-            .ResolveNode((ctx, id) => 
-                ctx.DataLoader<AttendeeByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
+            .ResolveNode((ctx, id) => ctx.DataLoader<AttendeeByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
 
         descriptor
             .Field(t => t.SessionsAttendees)
@@ -27,17 +26,17 @@ public class AttendeeType : ObjectType<Attendee>
     {
         public async Task<IEnumerable<Session>> GetSessionsAsync(
             Attendee attendee,
-            [ScopedService] ApplicationDbContext context,
+            [ScopedService] ApplicationDbContext dbContext,
             SessionByIdDataLoader sessionById,
             CancellationToken cancellationToken)
         {
-            int[] speakerIds = await context.Attendees
-                .Where(w => w.Id == attendee.Id)
+            int[] sessionIds = await dbContext.Attendees
+                .Where(a => a.Id == attendee.Id)
                 .Include(a => a.SessionsAttendees)
-                .SelectMany(a => a.SessionsAttendees.Select(s => s.SessionId))
+                .SelectMany(a => a.SessionsAttendees.Select(t => t.SessionId))
                 .ToArrayAsync();
 
-            return await sessionById.LoadAsync(speakerIds, cancellationToken);
+            return await sessionById.LoadAsync(sessionIds, cancellationToken);
         }
     }
 }

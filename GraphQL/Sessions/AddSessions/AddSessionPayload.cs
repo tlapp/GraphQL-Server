@@ -3,11 +3,17 @@ using GraphQL.Data.Entities;
 
 namespace GraphQL.Sessions.AddSessions;
 
-public class AddSessionPayload : SessionPayloadBase
+public class AddSessionPayload : Payload
 {
-    public AddSessionPayload(UserError error) : base(new[] { error }) { }
+    public AddSessionPayload(Session session)
+    {
+        Session = session;
+    }
 
-    public AddSessionPayload(Session session) : base(session) { }
+    public AddSessionPayload(UserError error)
+        : base(new[] { error })
+    {
+    }
 
-    public AddSessionPayload(IReadOnlyList<UserError> errors) : base(errors) { }
+    public Session? Session { get; init; }
 }

@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraphQL.Tracks;
 
-[ExtendObjectType("Query")]
+[ExtendObjectType(Name = "Query")]
 public class TrackQueries
 {
     [UseApplicationDbContext]
-    public async Task<IEnumerable<Track>> GetTracksAsync(
-        [ScopedService] ApplicationDbContext context,
-        CancellationToken cancellationToken) =>
-        await context.Tracks.ToListAsync(cancellationToken);
+    [UsePaging]
+    public IQueryable<Track> GetTracks(
+        [ScopedService] ApplicationDbContext context) =>
+        context.Tracks.OrderBy(t => t.Name);
 
     [UseApplicationDbContext]
     public Task<Track> GetTrackByNameAsync(
@@ -23,12 +23,11 @@ public class TrackQueries
         context.Tracks.FirstAsync(t => t.Name == name);
 
     [UseApplicationDbContext]
-    public async Task<IEnumerable<Track>> GetTracksByNamesAsync(
+    public async Task<IEnumerable<Track>> GetTrackByNamesAsync(
         string[] names,
         [ScopedService] ApplicationDbContext context,
         CancellationToken cancellationToken) =>
-        await context.Tracks.Where(w => names.Contains(w.Name))
-            .ToListAsync(cancellationToken);
+        await context.Tracks.Where(t => names.Contains(t.Name)).ToListAsync();
 
     public Task<Track> GetTrackByIdAsync(
         [ID(nameof(Track))] int id,

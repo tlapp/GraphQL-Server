@@ -7,26 +7,26 @@ namespace GraphQL.DataLoader;
 
 public class TrackByIdDataLoader : BatchDataLoader<int, Track>
 {
-    private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
     public TrackByIdDataLoader(
         IBatchScheduler batchScheduler,
-        IDbContextFactory<ApplicationDbContext> contextFactory)
+        IDbContextFactory<ApplicationDbContext> dbContextFactory)
         : base(batchScheduler)
     {
-        _contextFactory = contextFactory ??
-            throw new ArgumentNullException(nameof(contextFactory));
+        _dbContextFactory = dbContextFactory ??
+            throw new ArgumentNullException(nameof(dbContextFactory));
     }
 
     protected override async Task<IReadOnlyDictionary<int, Track>> LoadBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        await using ApplicationDbContext context =
-            _contextFactory.CreateDbContext();
+        await using ApplicationDbContext dbContext =
+            _dbContextFactory.CreateDbContext();
 
-        return await context.Tracks
-            .Where(w => keys.Contains(w.Id))
+        return await dbContext.Tracks
+            .Where(s => keys.Contains(s.Id))
             .ToDictionaryAsync(t => t.Id, cancellationToken);
     }
 }

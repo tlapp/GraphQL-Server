@@ -6,7 +6,7 @@ namespace GraphQL.Speakers.AddSpeakers;
 public class AddSpeakerPayload : SpeakerPayloadBase
 {
     public AddSpeakerPayload(Speaker speaker)
-            : base(speaker)
+        : base(speaker)
     {
     }
 

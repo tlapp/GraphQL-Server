@@ -6,8 +6,8 @@ using GraphQL.Tracks.RenameTracks;
 
 namespace GraphQL.Tracks;
 
-[ExtendObjectType("Mutation")]
-public class TracksMutations
+[ExtendObjectType(Name = "Mutation")]
+public class TrackMutations
 {
     [UseApplicationDbContext]
     public async Task<AddTrackPayload> AddTrackAsync(
@@ -29,7 +29,7 @@ public class TracksMutations
         [ScopedService] ApplicationDbContext context,
         CancellationToken cancellationToken)
     {
-        Track track = await context.Tracks.FindAsync(new object?[] { input.Id }, cancellationToken: cancellationToken);
+        Track track = await context.Tracks.FindAsync(input.Id);
         track.Name = input.Name;
 
         await context.SaveChangesAsync(cancellationToken);

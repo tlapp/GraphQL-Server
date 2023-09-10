@@ -6,26 +6,26 @@ namespace GraphQL.DataLoader;
 
 public class SessionByIdDataLoader : BatchDataLoader<int, Session>
 {
-    private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
     public SessionByIdDataLoader(
         IBatchScheduler batchScheduler,
-        IDbContextFactory<ApplicationDbContext> contextFactory)
+        IDbContextFactory<ApplicationDbContext> dbContextFactory)
         : base(batchScheduler)
     {
-        _contextFactory = contextFactory ??
-            throw new ArgumentNullException(nameof(contextFactory));
+        _dbContextFactory = dbContextFactory ??
+            throw new ArgumentNullException(nameof(dbContextFactory));
     }
 
     protected override async Task<IReadOnlyDictionary<int, Session>> LoadBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        await using ApplicationDbContext dbContext = 
-            _contextFactory.CreateDbContext();
+        await using ApplicationDbContext dbContext =
+            _dbContextFactory.CreateDbContext();
 
         return await dbContext.Sessions
-            .Where(w => keys.Contains(w.Id))
+            .Where(s => keys.Contains(s.Id))
             .ToDictionaryAsync(t => t.Id, cancellationToken);
     }
 }

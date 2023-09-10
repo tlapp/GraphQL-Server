@@ -6,15 +6,15 @@ namespace GraphQL.DataLoader;
 
 public class SpeakerByIdDataLoader : BatchDataLoader<int, Speaker>
 {
-    private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
     public SpeakerByIdDataLoader(
         IBatchScheduler batchScheduler,
-        IDbContextFactory<ApplicationDbContext> contextFactory)
+        IDbContextFactory<ApplicationDbContext> dbContextFactory)
         : base(batchScheduler)
     {
-        _contextFactory = contextFactory ?? 
-            throw new ArgumentNullException(nameof(contextFactory));
+        _dbContextFactory = dbContextFactory ??
+            throw new ArgumentNullException(nameof(dbContextFactory));
     }
 
     protected override async Task<IReadOnlyDictionary<int, Speaker>> LoadBatchAsync(
@@ -22,10 +22,10 @@ public class SpeakerByIdDataLoader : BatchDataLoader<int, Speaker>
         CancellationToken cancellationToken)
     {
         await using ApplicationDbContext dbContext =
-            _contextFactory.CreateDbContext();
+            _dbContextFactory.CreateDbContext();
 
         return await dbContext.Speakers
-            .Where(w => keys.Contains(w.Id))
+            .Where(s => keys.Contains(s.Id))
             .ToDictionaryAsync(t => t.Id, cancellationToken);
     }
 }

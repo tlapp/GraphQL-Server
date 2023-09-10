@@ -5,7 +5,7 @@ using GraphQL.Speakers.AddSpeakers;
 
 namespace GraphQL.Speakers;
 
-[ExtendObjectType("Mutation")]
+[ExtendObjectType(Name = "Mutation")]
 public class SpeakerMutations
 {
     [UseApplicationDbContext]

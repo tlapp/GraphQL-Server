@@ -13,27 +13,23 @@ public class SessionType : ObjectType<Session>
         descriptor
             .ImplementsNode()
             .IdField(t => t.Id)
-            .ResolveNode((ctx, id) => 
-                ctx.DataLoader<SessionByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
+            .ResolveNode((ctx, id) => ctx.DataLoader<SessionByIdDataLoader>().LoadAsync(id, ctx.RequestAborted));
 
         descriptor
             .Field(t => t.SessionSpeakers)
-            .ResolveWith<SessionResolvers>(t => 
-                t.GetSpeakersAsync(default!, default!, default!, default))
+            .ResolveWith<SessionResolvers>(t => t.GetSpeakersAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
             .Name("speakers");
 
         descriptor
             .Field(t => t.SessionAttendees)
-            .ResolveWith<SessionResolvers>(t => 
-                t.GetAttendeesAsync(default!, default!, default!, default))
+            .ResolveWith<SessionResolvers>(t => t.GetAttendeesAsync(default!, default!, default!, default))
             .UseDbContext<ApplicationDbContext>()
             .Name("attendees");
 
         descriptor
             .Field(t => t.Track)
-            .ResolveWith<SessionResolvers>(t => 
-                t.GetTrackAsync(default!, default!, default));
+            .ResolveWith<SessionResolvers>(t => t.GetTrackAsync(default!, default!, default));
 
         descriptor
             .Field(t => t.TrackId)

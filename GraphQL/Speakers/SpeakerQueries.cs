@@ -1,17 +1,18 @@
-﻿using GraphQL.Extensions;
-using GraphQL.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using GraphQL.Data;
 using GraphQL.Data.Entities;
 using GraphQL.DataLoader;
+using GraphQL.Extensions;
 
 namespace GraphQL.Speakers;
 
-[ExtendObjectType("Query")]
+[ExtendObjectType(Name = "Query")]
 public class SpeakerQueries
 {
     [UseApplicationDbContext]
-    public Task<List<Speaker>> GetSpeakers([ScopedService] ApplicationDbContext context) =>
-        context.Speakers.ToListAsync();
+    [UsePaging]
+    public IQueryable<Speaker> GetSpeakers(
+        [ScopedService] ApplicationDbContext context) =>
+        context.Speakers.OrderBy(t => t.Name);
 
     public Task<Speaker> GetSpeakerByIdAsync(
         [ID(nameof(Speaker))] int id,

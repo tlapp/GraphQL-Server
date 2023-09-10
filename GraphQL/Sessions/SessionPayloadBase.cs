@@ -5,8 +5,6 @@ namespace GraphQL.Sessions;
 
 public class SessionPayloadBase : Payload
 {
-    public Session? Session { get; }
-
     protected SessionPayloadBase(Session session)
     {
         Session = session;
@@ -16,4 +14,6 @@ public class SessionPayloadBase : Payload
         : base(errors)
     {
     }
+
+    public Session? Session { get; }
 }
