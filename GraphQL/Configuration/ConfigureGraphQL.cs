@@ -1,5 +1,6 @@
-﻿using GraphQL.DataLoader;
-using GraphQL.Presentation;
+﻿using GraphQL.Sessions;
+using GraphQL.Speakers;
+using GraphQL.Tracks;
 using GraphQL.Types;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -9,11 +10,17 @@ public static class ConfigureGraphQL
     public static IServiceCollection AddGraphQL(this IServiceCollection services)
     {
         services.AddGraphQLServer()
-            .AddQueryType<Query>()
-            .AddMutationType<Mutation>()
+            .AddQueryType(d => d.Name("Query"))
+                .AddTypeExtension<SpeakerQueries>()
+            .AddMutationType(d => d.Name("Mutation"))
+                .AddTypeExtension<SpeakerMutations>()
+                .AddTypeExtension<SessionMutations>()
+                .AddTypeExtension<TracksMutations>()
+            .AddType<AttendeeType>()
             .AddType<SpeakerType>()
-            .AddDataLoader<SpeakerByIdDataLoader>()
-            .AddDataLoader<SessionByIdDataLoader>();
+            .AddType<SessionType>()
+            .AddType<TrackType>()
+            .EnableRelaySupport();
 
         return services;
     }

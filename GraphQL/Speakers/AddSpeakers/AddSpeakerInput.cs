@@ -1,4 +1,4 @@
-﻿namespace GraphQL.Mutations.Speakers.AddSpeaker;
+﻿namespace GraphQL.Speakers.AddSpeakers;
 
 public record AddSpeakerInput(
     string Name,

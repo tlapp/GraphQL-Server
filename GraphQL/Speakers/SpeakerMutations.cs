@@ -1,11 +1,12 @@
 ﻿using GraphQL.Data;
 using GraphQL.Data.Entities;
 using GraphQL.Extensions;
-using GraphQL.Mutations.Speakers.AddSpeaker;
+using GraphQL.Speakers.AddSpeakers;
 
-namespace GraphQL.Presentation;
+namespace GraphQL.Speakers;
 
-public class Mutation
+[ExtendObjectType("Mutation")]
+public class SpeakerMutations
 {
     [UseApplicationDbContext]
     public async Task<AddSpeakerPayload> AddSpeakerAsync(
